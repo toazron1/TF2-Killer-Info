@@ -30,7 +30,7 @@
 * 		1.3.0 - Polycount translations, added more customkill checks, using SM constants, code optimizations
 * 		1.3.1 - Fixed potential clientpref error.
 * 		1.4.0 - Check for translation errors and logging for missing weapon names
-* 		1.4.1 - GIT commit test/ comment updates - minor optimization
+* 		1.4.1 - Minor optimizaion - log file error checking
 */
 
 #include <sourcemod>
@@ -42,12 +42,14 @@
 /*
 * Uncomment for color support in the chat messages.
 */
-//#define USECOLORS	
+#define USECOLORS	
 
 /*
 * Uncomment to enable logging of missing weapon translations.
+* Make sure that LOG_WEAPON_ERRORS_FILE exists or plugin will fail to load.
 */
-//#define LOG_WEAPON_ERRORS
+#define LOG_WEAPON_ERRORS
+#define LOG_WEAPON_ERRORS_FILE	"logs/weapon_errors.txt"
 
 #if defined USECOLORS
 #include <colors>
@@ -58,6 +60,10 @@
 #define TF2_DAMAGEBIT_CRITS	(1<<20)		/* From SDK - DAMAGE_ACID (1048576) */
 
 new g_bShowOutput[MAXPLAYERS + 1];
+
+#if defined LOG_WEAPON_ERRORS
+new String:g_szLogFile[128];
+#endif
 
 new Handle:g_hCvarDefaultSetting = INVALID_HANDLE;
 new Handle:g_hCookie = INVALID_HANDLE;
@@ -85,12 +91,18 @@ public OnPluginStart()
 	
 	g_hKeyValue = CreateKeyValues("Phrases");
 	decl String:szBuffer[255];
+	
 	/*
-	* Loads the translation file into a keyvalue so we can check if the translation exists
-	* no need to check for the file since the plugin will fail if translation file is not found.
+	* Loads the translation file into a keyvalue - easy way to check if a weapon exists (no need for file check - plugin fails if translation file is not found)
 	*/
 	BuildPath(Path_SM, szBuffer, sizeof(szBuffer), "translations/killersinfo.phrases.txt");
 	FileToKeyValues(g_hKeyValue, szBuffer);
+	
+	#if defined LOG_WEAPON_ERRORS
+	BuildPath(Path_SM, g_szLogFile, sizeof(g_szLogFile), LOG_WEAPON_ERRORS_FILE);
+	if (!FileExists(g_szLogFile))
+		SetFailState("Weapon log file missing (%s)", g_szLogFile);		
+	#endif
 }
 
 public OnClientPostAdminCheck(iClient)
@@ -147,7 +159,7 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
 		bWeaponFound = true;
 	#if defined LOG_WEAPON_ERRORS
 	else
-		LogError("Weapon translation not found for the weapon: %s", szWeapon);	
+		LogToFileEx(g_szLogFile, "Translation missing for weapon: %s", szWeapon);	
 	#endif	
 	
 	/* 
