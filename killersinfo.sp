@@ -30,7 +30,7 @@
 * 		1.3.0 - Polycount translations, added more customkill checks, using SM constants, code optimizations
 * 		1.3.1 - Fixed potential clientpref error.
 * 		1.4.0 - Check for translation errors and logging for missing weapon names
-* 		1.4.1 - GIT commit test/ comment updates
+* 		1.4.1 - GIT commit test/ comment updates - minor optimization
 */
 
 #include <sourcemod>
@@ -53,7 +53,7 @@
 #include <colors>
 #endif
 
-#define VERSION "1.4.0"
+#define VERSION "1.4.1"
 
 #define TF2_DAMAGEBIT_CRITS	(1<<20)		/* From SDK - DAMAGE_ACID (1048576) */
 
