@@ -30,6 +30,7 @@
 * 		1.3.0 - Polycount translations, added more customkill checks, using SM constants, code optimizations
 * 		1.3.1 - Fixed potential clientpref error.
 * 		1.4.0 - Check for translation errors and logging for missing weapon names
+* 		1.4.1 - GIT commit test/ comment updates
 */
 
 #include <sourcemod>
@@ -38,10 +39,14 @@
 
 #pragma semicolon 1
 
-//UNCOMMENT FOR COLOR SUPPORT
+/*
+* Uncomment for color support in the chat messages.
+*/
 //#define USECOLORS	
 
-//Uncomment to enable logging
+/*
+* Uncomment to enable logging of missing weapon translations.
+*/
 //#define LOG_WEAPON_ERRORS
 
 #if defined USECOLORS
@@ -50,7 +55,7 @@
 
 #define VERSION "1.4.0"
 
-#define TF2_DAMAGEBIT_CRITS	(1<<20)		//From SDK - DAMAGE_ACID (1048576)
+#define TF2_DAMAGEBIT_CRITS	(1<<20)		/* From SDK - DAMAGE_ACID (1048576) */
 
 new g_bShowOutput[MAXPLAYERS + 1];
 
@@ -80,7 +85,11 @@ public OnPluginStart()
 	
 	g_hKeyValue = CreateKeyValues("Phrases");
 	decl String:szBuffer[255];
-	BuildPath(Path_SM, szBuffer, sizeof(szBuffer), "translations/killersinfo.phrases.txt");	//no need to check for the file - plugin will fail if translation file is not found.
+	/*
+	* Loads the translation file into a keyvalue so we can check if the translation exists
+	* no need to check for the file since the plugin will fail if translation file is not found.
+	*/
+	BuildPath(Path_SM, szBuffer, sizeof(szBuffer), "translations/killersinfo.phrases.txt");
 	FileToKeyValues(g_hKeyValue, szBuffer);
 }
 
@@ -91,15 +100,10 @@ public OnClientPostAdminCheck(iClient)
 	{
 		new String:szBuffer[2];
 		GetClientCookie(iClient, g_hCookie, szBuffer, sizeof(szBuffer));
-		if (strlen(szBuffer) < 1)	//the cookie doesn't exist
+		if (strlen(szBuffer) < 1)	/* Cookie doesn't exist so set the bool to the cvar default */
 			g_bShowOutput[iClient] = GetConVarInt(g_hCvarDefaultSetting);
 		else
-			switch (StringToInt(szBuffer))
-			{
-				case 1: g_bShowOutput[iClient] = false;
-				case 0: g_bShowOutput[iClient] = true;
-				default: g_bShowOutput[iClient] = GetConVarInt(g_hCvarDefaultSetting);	//just in case someone decideds to set it to something else...
-			}
+			g_bShowOutput[iClient] = StringToInt(szBuffer);
 	}
 }
 
@@ -118,11 +122,13 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
 	
 	GetEventString(event, "weapon_logclassname", szWeapon, sizeof(szWeapon));
 
-	if (!iAttacker || iAttacker == iVictim) return Plugin_Continue;		//skip worldspawn and suicides
-	if (iDeathFlags & TF_DEATHFLAG_DEADRINGER) return Plugin_Continue;	//skip dead ringer kills
+	/* Skip over worldspawn, suicides and deadringer kills */
+	if (!iAttacker || iAttacker == iVictim) return Plugin_Continue;
+	if (iDeathFlags & TF_DEATHFLAG_DEADRINGER) return Plugin_Continue;
 
-	SetGlobalTransTarget(iVictim);	//better translation support for clients
+	SetGlobalTransTarget(iVictim);
 
+	/* Attacker finished victim off */
 	if(strcmp(szWeapon, "world", false) == 0 || strcmp(szWeapon, "player", false) == 0)
 	{
 		#if defined USECOLORS
@@ -133,6 +139,9 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
 		return Plugin_Continue;
 	}
 	
+	/*
+	* This is needed since we are assuming that the weapon name exists in the translation file.  Should work around the massive amount of errors when valve adds new weapons.
+	*/
 	new bool:bWeaponFound = false;
 	if (TranslationExists(szWeapon))
 		bWeaponFound = true;
@@ -141,7 +150,9 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
 		LogError("Weapon translation not found for the weapon: %s", szWeapon);	
 	#endif	
 	
-
+	/* 
+	* Player died before killing you
+	*/
 	if (!IsPlayerAlive(iAttacker))
 	{
 		if (bWeaponFound)
@@ -159,6 +170,9 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
 
 	FormatEx(szKillType, sizeof(szKillType), "killed");
 
+	/*
+	* Kill was a crit - lets find out what kind
+	*/
 	if (iDamageBits & TF2_DAMAGEBIT_CRITS)
 	{
 		decl iAttackerCond, iVictimCond;
@@ -174,7 +188,9 @@ public Action:event_player_death(Handle:event, const String:name[], bool:dontBro
 		else
 			FormatEx(szKillType, sizeof(szKillType), "crit");
 	}
-	
+	/*
+	* This kill was a special kill - lets find out which kind
+	*/
 	new bool:iIsTaunt = false;
 	switch (iCustomKill)
 	{
