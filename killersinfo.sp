@@ -42,13 +42,13 @@
 /*
 * Uncomment for color support in the chat messages.
 */
-#define USECOLORS	
+//#define USECOLORS	
 
 /*
 * Uncomment to enable logging of missing weapon translations.
 * Make sure that LOG_WEAPON_ERRORS_FILE exists or plugin will fail to load.
 */
-#define LOG_WEAPON_ERRORS
+//#define LOG_WEAPON_ERRORS
 #define LOG_WEAPON_ERRORS_FILE	"logs/weapon_errors.txt"
 
 #if defined USECOLORS
