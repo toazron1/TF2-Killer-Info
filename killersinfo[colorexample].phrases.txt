@@ -10,10 +10,30 @@
 		"pl"   		"{teamcolor}{1} {olive}{2}{default} z {green}{3}{default} ({olive}{4}hp{default} pozostalo)"
 	}
 
+	"killed you nowpn"
+	{
+		"#format"	"{1:N},{2:t},{3:s},{4:i}"
+		"en"		"{teamcolor}{1} {olive}{2}{default} you with: {green}{3}{default} ({olive}{4}hp{default} left)"
+		"fr"		"{teamcolor}{1} {olive}{2}{default} avec {green}{3}{default} ({olive}{4}hp{default} restants})"
+		"hu"		"{teamcolor}{1} {olive}{2}{default} Teged! Fegyver: {green}{3}{default} ({olive}{4}hp{default} hatralevo)"
+		"de"		"{teamcolor}{1} {olive}{2}{default} Dich mit {green}{3}{default} ({olive}{4}hp{default} übrig)"
+		"pl"   		"{teamcolor}{1} {olive}{2}{default} z {green}{3}{default} ({olive}{4}hp{default} pozostalo)"
+	}
+
 	"died before killing"
 	{
 		"#format" 	"{1:N},{2:t}"
 		"en"		"{teamcolor}{1}{default} died before killing you with {olive}{2}{default}."
+		"fr"		"{teamcolor}{1}{default} est mort avant de te tuer avec {olive}{2}{default}."
+		"hu"		"{teamcolor}{1}{default} meghalt mielott teged megolt! Fegyver: {olive}{2}{default}."
+		"de"		"{teamcolor}{1}{default} starb bevor Du getötet wurdest Dich mit {olive}{2}{default}."
+		"pl"    	"{teamcolor}{1}{default} zginal przed zabójstwem ciebie z {olive}{2}{default}"
+	}
+
+	"died before killing nowpn"
+	{
+		"#format" 	"{1:N},{2:s}"
+		"en"		"{teamcolor}{1}{default} died before killing you with: {olive}{2}{default}."
 		"fr"		"{teamcolor}{1}{default} est mort avant de te tuer avec {olive}{2}{default}."
 		"hu"		"{teamcolor}{1}{default} meghalt mielott teged megolt! Fegyver: {olive}{2}{default}."
 		"de"		"{teamcolor}{1}{default} starb bevor Du getötet wurdest Dich mit {olive}{2}{default}."
@@ -1060,3 +1080,4 @@
 	{
 		"en"	"a Tripmine"
 	}
+}

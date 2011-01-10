@@ -10,10 +10,30 @@
 		"pl"   		"{1} {2} z {3} ({4}hp pozostalo)"
 	}
 
+	"killed you nowpn"
+	{
+		"#format"	"{1:N},{2:t},{3:s},{4:i}"
+		"en"		"{1} {2} you with: {3} ({4}hp left)"
+		"fr"		"{1} {2} avec {3} ({4}hp restants})"
+		"hu"		"{1} {2} Teged! Fegyver: {3} ({4}hp hatralevo)"
+		"de"		"{1} {2} Dich mit {3} ({4}hp übrig)"
+		"pl"   		"{1} {2} z {3} ({4}hp pozostalo)"
+	}
+
 	"died before killing"
 	{
 		"#format" 	"{1:N},{2:t}"
 		"en"		"{1} died before killing you with {2}."
+		"fr"		"{1} est mort avant de te tuer avec {2}."
+		"hu"		"{1} meghalt mielott teged megolt! Fegyver: {2}."
+		"de"		"{1} starb bevor Du getötet wurdest Dich mit {2}."
+		"pl"    	"{1} zginal przed zabójstwem ciebie z {2}"
+	}
+
+	"died before killing nowpn"
+	{
+		"#format" 	"{1:N},{2:s}"
+		"en"		"{1} died before killing you with: {2}."
 		"fr"		"{1} est mort avant de te tuer avec {2}."
 		"hu"		"{1} meghalt mielott teged megolt! Fegyver: {2}."
 		"de"		"{1} starb bevor Du getötet wurdest Dich mit {2}."
@@ -1060,3 +1080,4 @@
 	{
 		"en"	"a Tripmine"
 	}
+}

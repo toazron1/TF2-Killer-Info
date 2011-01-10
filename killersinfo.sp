@@ -67,7 +67,7 @@ new String:g_szLogFile[128];
 
 new Handle:g_hCvarDefaultSetting = INVALID_HANDLE;
 new Handle:g_hCookie = INVALID_HANDLE;
-new Handle:g_hKeyValue = INVALID_HANDLE;
+new Handle:g_hKeyValues = INVALID_HANDLE;
 
 public Plugin:myinfo =
 {
@@ -89,14 +89,14 @@ public OnPluginStart()
 	g_hCvarDefaultSetting = CreateConVar("sm_ki_default", "1", "default output setting for new players");
 	g_hCookie = RegClientCookie("killersinfo_display", "Shows info about your killing when you get killed.", CookieAccess_Public);
 	
-	g_hKeyValue = CreateKeyValues("Phrases");
+	g_hKeyValues = CreateKeyValues("Phrases");
 	decl String:szBuffer[255];
 	
 	/*
 	* Loads the translation file into a keyvalue - easy way to check if a weapon exists (no need for file check - plugin fails if translation file is not found)
 	*/
 	BuildPath(Path_SM, szBuffer, sizeof(szBuffer), "translations/killersinfo.phrases.txt");
-	FileToKeyValues(g_hKeyValue, szBuffer);
+	FileToKeyValues(g_hKeyValues, szBuffer);
 	
 	#if defined LOG_WEAPON_ERRORS
 	BuildPath(Path_SM, g_szLogFile, sizeof(g_szLogFile), LOG_WEAPON_ERRORS_FILE);
@@ -258,9 +258,9 @@ public Action:SayCallback(iClient, const String:command[], argc)
 	return Plugin_Handled;
 }
 
-stock bool:TranslationExists(String:szString[])
+stock bool:TranslationExists(String:szString[]) 
 {
-	if (!KvJumpToKey(g_hKeyValue, szString)) 
-		return false;
-	return true;
+	new bool:result = KvJumpToKey(g_hKeyValues, szString, false);
+	KvRewind(g_hKeyValues);
+	return result;
 }
