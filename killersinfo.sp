@@ -261,7 +261,6 @@ public Action:SayCallback(iClient, const String:command[], argc)
 stock bool:TranslationExists(String:szString[]) 
 {
 	new bool:result = KvJumpToKey(g_hKeyValues, szString, false);
-	PrintToServer("result = %i", result);
 	KvRewind(g_hKeyValues);
 	return result;
 }
